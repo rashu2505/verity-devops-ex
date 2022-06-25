@@ -9,14 +9,27 @@ pipeline {
                 sh 'mvn clean'
             }
         }
-		//Code ends for stage Clean
 		
-		//Code starts for stage PMD
-		stage('PMD') {
+		//Code starts for stage Unit Test
+        stage('Unit Test') {
             steps {
-                sh 'mvn site'
+                sh 'mvn test'
+            }	
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
-		//Code ends for stage PMD
+		//Code ends for stage Unit Test
+		
+		
+		//Code starts for stage Code Coverage
+		stage('Code Coverage') {
+            steps {
+                sh 'mvn jacoco:report'
+            }
+        }
+		//Code ends for stage Code Coverage
     }
 }
